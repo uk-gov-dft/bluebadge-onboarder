@@ -5,28 +5,51 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/4.5.1/userguide/tutorial_java_projects.html
  */
+buildscript {
+    repositories {
+      jcenter()
+      mavenCentral()
+    }
+    dependencies {
+      classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+    }
+}
 
 plugins {
-    // Apply the java plugin to add support for Java
     id 'java'
-
-    // Apply the application plugin to add support for building an application
     id 'application'
-    id "org.gradle.java"
-    id "com.scuilion.syntastic" version "0.3.8"
+    id 'org.gradle.java'
+    id 'com.scuilion.syntastic' version '0.3.8'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
+
+repositories {
+  jcenter()
+  mavenCentral()
+}
+
+ project.ext {
+    slf4jVersion = "1.7.25"
+    postgresVersion="42.2.5"
 }
 
 // Define the main class for the application
 mainClassName = 'App'
 
 dependencies {
-    // Use JUnit test framework
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.1'
+  compile "org.postgresql:postgresql:$postgresVersion"
+
+	testCompile('org.junit.jupiter:junit-jupiter-api:5.3.1')
+	testCompile('org.junit.jupiter:junit-jupiter-params:5.3.1')
+	testRuntime('org.junit.jupiter:junit-jupiter-engine:5.3.1')
 }
 
-// In this section you declare where to find the dependencies of your project
-repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+
+test {
+	useJUnitPlatform()
+  testLogging.showStandardStreams = true
+}
+
+wrapper {
+	gradleVersion = '4.8'
 }
