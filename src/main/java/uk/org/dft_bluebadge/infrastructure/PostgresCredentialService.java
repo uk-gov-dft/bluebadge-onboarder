@@ -12,6 +12,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import uk.org.dft_bluebadge.Credential;
 import uk.org.dft_bluebadge.CredentialFactory;
 import uk.org.dft_bluebadge.CredentialService;
@@ -29,6 +31,8 @@ public class PostgresCredentialService implements CredentialService{
   public Credential generate(LocalAuthorityConsumer consumer) throws RuntimeException{
 
     Credential credential = this.factory.generate();
+
+    LOG.info(credential.getClientID());
     Connection connection = null;
 
     try{
@@ -40,7 +44,9 @@ public class PostgresCredentialService implements CredentialService{
       String SQL = "INSERT INTO usermanagement.client_credentials (client_id, client_secret, local_authority_short_code, active, creation_timestamp, expiry_timestamp) VALUES (?,?,?,?,?,?)";
       PreparedStatement pstmt = connection.prepareStatement(SQL);
       pstmt.setString(1, credential.getClientID());
-      pstmt.setString(2, credential.getClientSecret());
+
+      String hashedSecret = BCrypt.hashpw(credential.getClientSecret(), BCrypt.gensalt(12));
+      pstmt.setString(2, hashedSecret);
       pstmt.setString(3, consumer.getShortCode());
       pstmt.setBoolean(4, true);
 
