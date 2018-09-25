@@ -38,7 +38,7 @@ public class AwsS3CredentialService {
   public CredentialLink storeCredential(Credential credential, String bucketName) throws RuntimeException{
     try { 
       UUID uuid = UUID.randomUUID();
-      String objectKey = uuid.toString();
+      String objectKey = uuid.toString() + ".txt";
       String content = credential.getClientID()+":"+credential.getClientSecret();
       byte[] contentAsBytes = content.getBytes();
       ByteArrayInputStream contentsAsStream = new ByteArrayInputStream(contentAsBytes);

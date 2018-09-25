@@ -18,8 +18,6 @@ public class Base64CredentialFactory implements CredentialFactory{
 
     String clientId = Base64.encodeBase64URLSafeString(clientIdBytes);
 
-    LOG.info(clientId);
-
     byte[] clientSecretBytes = new byte[48];
     random.nextBytes(clientSecretBytes);
     String clientSecret = Base64.encodeBase64URLSafeString(clientSecretBytes);

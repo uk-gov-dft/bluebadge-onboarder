@@ -37,10 +37,12 @@ repositories {
     awsVersion="1.11.414"
     uniRestVersion="1.4.9"
     notifyVersion="3.12.0-RELEASE"
+    sparkVersion="2.7.2"
+    gsonVersion="2.8.0"
 }
 
 // Define the main class for the application
-mainClassName = 'App'
+mainClassName = 'uk.org.dft_bluebadge.App'
 
 dependencies {
   compile("org.postgresql:postgresql:$postgresVersion")
@@ -49,6 +51,8 @@ dependencies {
   compile("com.amazonaws:aws-java-sdk:$awsVersion")
   compile("com.mashape.unirest:unirest-java:$uniRestVersion")
   compile("uk.gov.service.notify:notifications-java-client:$notifyVersion")
+  compile("com.sparkjava:spark-core:$sparkVersion")
+  compile("com.google.code.gson:gson:$gsonVersion")
 
 	testCompile("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 	testCompile("org.junit.jupiter:junit-jupiter-params:$junitVersion")

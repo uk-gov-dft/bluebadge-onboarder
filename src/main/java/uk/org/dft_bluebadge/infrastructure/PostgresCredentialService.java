@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import uk.org.dft_bluebadge.Configuration;
 import uk.org.dft_bluebadge.Credential;
 import uk.org.dft_bluebadge.CredentialFactory;
 import uk.org.dft_bluebadge.CredentialService;
@@ -32,15 +33,19 @@ public class PostgresCredentialService implements CredentialService{
 
     Credential credential = this.factory.generate();
 
-    LOG.info(credential.getClientID());
     Connection connection = null;
 
     try{
       Class.forName("org.postgresql.Driver");
       Properties connectionProps = new Properties();
-      connectionProps.put("user", "developer");
-      connectionProps.put(" ***REMOVED***);
-      connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/bb_dev", connectionProps);
+      connectionProps.put("user", Configuration.DB_USER());
+      connectionProps.put("password", Configuration.DB_PASSWORD());
+
+      String dbHost = Configuration.DB_HOST();
+      String dbPort = Configuration.DB_PORT();
+      String dbName = Configuration.DB_NAME();
+      String dbUrl = String.format("jdbc:postgresql://%s:%s/%s", dbHost, dbPort, dbName);
+      connection = DriverManager.getConnection(dbUrl, connectionProps);
       String SQL = "INSERT INTO usermanagement.client_credentials (client_id, client_secret, local_authority_short_code, active, creation_timestamp, expiry_timestamp) VALUES (?,?,?,?,?,?)";
       PreparedStatement pstmt = connection.prepareStatement(SQL);
       pstmt.setString(1, credential.getClientID());

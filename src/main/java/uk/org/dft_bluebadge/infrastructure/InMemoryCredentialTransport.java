@@ -21,10 +21,11 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import uk.org.dft_bluebadge.Configuration;
 import uk.org.dft_bluebadge.Credential;
+import uk.org.dft_bluebadge.CredentialLink;
 import uk.org.dft_bluebadge.CredentialTransport;
 import uk.org.dft_bluebadge.CredentialTransportModel;
-import uk.org.dft_bluebadge.CredentialLink;
 import uk.org.dft_bluebadge.EmailAddress;
 import uk.org.dft_bluebadge.LocalAuthorityConsumer;
 
@@ -36,15 +37,14 @@ public class InMemoryCredentialTransport implements CredentialTransport{
 
 
   public InMemoryCredentialTransport(){
-    String clientRegion = "eu-west-2";
+    String clientRegion = Configuration.AWS_REGION();
     this.awsS3CredentialService = new AwsS3CredentialService(clientRegion);
   }
 
   public Boolean send(LocalAuthorityConsumer consumer, Credential credential){
-    String bucketName = "dev-uk-gov-dft-client-credentials";
+    String bucketName = Configuration.S3_BUCKET();
 
     try { 
-      
       CredentialLink link = this.awsS3CredentialService.storeCredential(credential, bucketName);
       this.last = new CredentialTransportModel(consumer, link);
       return true;
