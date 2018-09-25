@@ -14,5 +14,7 @@ public class Onboarder{
 
   public void onboard(LocalAuthorityConsumer consumer){
     Credential credential = this.service.generate(consumer);
+
+    this.transport.send(consumer, credential);
   }
 }

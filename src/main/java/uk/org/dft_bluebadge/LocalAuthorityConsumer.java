@@ -1,16 +1,18 @@
 package uk.org.dft_bluebadge;
 
+import uk.org.dft_bluebadge.EmailAddress;
+
 public class LocalAuthorityConsumer{
 
-  private String email;
+  private EmailAddress email;
   private String shortCode;
 
-  public LocalAuthorityConsumer(String email, String shortCode){
+  public LocalAuthorityConsumer(EmailAddress email, String shortCode){
     this.email = email;
     this.shortCode = shortCode; 
   }
 
-  public String getEmail(){
+  public EmailAddress getEmail(){
     return this.email;
   }
 
