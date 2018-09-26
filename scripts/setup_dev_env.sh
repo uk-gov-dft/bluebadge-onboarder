@@ -6,7 +6,7 @@ pushd dev-env
 
 bash load-modules.sh
 
-docker-compose up postgresql
+docker-compose up -d postgresql
 
 ./wait_for_it.sh localhost:5432 
 
