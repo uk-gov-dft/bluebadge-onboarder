@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'Functional' }
 
    parameters {
        string(name: 'API_MGT_DB_HOST', defaultValue: 'localhost')
