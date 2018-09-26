@@ -33,8 +33,6 @@ public class PostgresCredentialService implements CredentialService{
 
     Credential credential = this.factory.generate();
 
-    Connection connection = null;
-
     try{
       Class.forName("org.postgresql.Driver");
       Properties connectionProps = new Properties();
@@ -45,36 +43,31 @@ public class PostgresCredentialService implements CredentialService{
       String dbPort = Configuration.DB_PORT();
       String dbName = Configuration.DB_NAME();
       String dbUrl = String.format("jdbc:postgresql://%s:%s/%s", dbHost, dbPort, dbName);
-      connection = DriverManager.getConnection(dbUrl, connectionProps);
-      String SQL = "INSERT INTO usermanagement.client_credentials (client_id, client_secret, local_authority_short_code, active, creation_timestamp, expiry_timestamp) VALUES (?,?,?,?,?,?)";
-      PreparedStatement pstmt = connection.prepareStatement(SQL);
-      pstmt.setString(1, credential.getClientID());
+      try(Connection connection = DriverManager.getConnection(dbUrl, connectionProps)){
+        String SQL = "INSERT INTO usermanagement.client_credentials (client_id, client_secret, local_authority_short_code, active, creation_timestamp, expiry_timestamp) VALUES (?,?,?,?,?,?)";
+        try(PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+          pstmt.setString(1, credential.getClientID());
 
-      String hashedSecret = BCrypt.hashpw(credential.getClientSecret(), BCrypt.gensalt(12));
-      pstmt.setString(2, hashedSecret);
-      pstmt.setString(3, consumer.getShortCode());
-      pstmt.setBoolean(4, true);
+          String hashedSecret = BCrypt.hashpw(credential.getClientSecret(), BCrypt.gensalt(12));
+          pstmt.setString(2, hashedSecret);
+          pstmt.setString(3, consumer.getShortCode());
+          pstmt.setBoolean(4, true);
 
-      Calendar cal = GregorianCalendar.getInstance();
-      pstmt.setDate(5, new java.sql.Date(cal.getTime().getTime()));
+          Calendar cal = GregorianCalendar.getInstance();
+          pstmt.setDate(5, new java.sql.Date(cal.getTime().getTime()));
 
-      cal.add(Calendar.YEAR, 1);
-      java.util.Date expiry = cal.getTime();
-      pstmt.setDate(6, new java.sql.Date(expiry.getTime()));
+          cal.add(Calendar.YEAR, 1);
+          java.util.Date expiry = cal.getTime();
+          pstmt.setDate(6, new java.sql.Date(expiry.getTime()));
 
-      Boolean success = pstmt.execute();
-      return credential;
-    }catch(SQLException ex){
-      LOG.log(Level.SEVERE, ex.getMessage(), ex);
-    }catch(ClassNotFoundException ex){
-      LOG.log(Level.SEVERE, ex.getMessage(), ex);
-    }
-    finally{
-      try{
-        connection.close();
+          Boolean success = pstmt.execute();
+          return credential;
+        }
       }catch(SQLException ex){
         LOG.log(Level.SEVERE, ex.getMessage(), ex);
       }
+    }catch(ClassNotFoundException ex){
+      LOG.log(Level.SEVERE, ex.getMessage(), ex);
     }
     throw new RuntimeException("Failed to store credential in database");
   }
