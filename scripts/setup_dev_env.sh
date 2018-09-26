@@ -2,7 +2,7 @@
 
 git clone git@github.com:uk-gov-dft/dev-env.git
 
-pushd dev-env
+pushd scripts/dev-env
 
 docker-compose up postgresql
 
