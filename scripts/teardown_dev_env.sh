@@ -1,6 +1,6 @@
 #! /bin/bash
 
-pushd scripts/dev-env
+pushd dev-env
 
 docker-compose kill
 docker-compose rm

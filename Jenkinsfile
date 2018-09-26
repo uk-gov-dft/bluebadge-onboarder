@@ -39,6 +39,7 @@ pipeline {
     post {
         always {
           sh 'sh scripts/teardown_dev_env.sh'
+          cleanWs()
         }
         success {
             echo 'I succeeeded!'
