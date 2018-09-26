@@ -6,7 +6,7 @@ pipeline {
        string(name: 'API_MGT_DB_PORT', defaultValue: '5432')
        string(name: 'API_MGT_DB_USER', defaultValue: 'developer')
        string(name: 'API_MGT_DB_NAME', defaultValue: 'bb_dev')
-       string(name: 'API_MGT_NOTIFY_TEMPLATE_ID', defaultValue: 'test__live_api_creds-70a18c16-bfa1-4d8c-83ac-c8d16f425ea7-3f31435d-07ea-4cd1-b373-a50e93441628')
+       string(name: 'API_MGT_NOTIFY_TEMPLATE_ID', defaultValue: 'e2ec9749-9ed2-4cb1-a506-10dc20ab9151')
        string(name: 'API_MGT_AWS_REGION', defaultValue: 'eu-west-2')
        string(name: 'API_MGT_S3_BUCKET', defaultValue: 'dev-uk-gov-dft-client-credentials')
    }
@@ -23,10 +23,32 @@ pipeline {
     }
 
     stages {
+        stage('Setup') {
+          sh 'bash scripts/setup_dev_env.sh'
+        }
+
         stage('Test') {
             steps {
               sh './gradlew --no-daemon clean test'
             } 
+        }
+    }
+
+    post {
+        always {
+          sh 'sh scripts/teardown_dev_env.sh'
+        }
+        success {
+            echo 'I succeeeded!'
+        }
+        unstable {
+            echo 'I am unstable :/'
+        }
+        failure {
+            echo 'I failed :('
+        }
+        changed {
+            echo 'Things were different before...'
         }
     }
 }

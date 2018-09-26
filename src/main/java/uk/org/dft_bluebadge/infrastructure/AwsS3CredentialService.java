@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 
 import uk.org.dft_bluebadge.Credential;
 import uk.org.dft_bluebadge.CredentialLink;
-import uk.org.dft_bluebadge.LocalAuthorityConsumer;
 
 public class AwsS3CredentialService {
 
@@ -38,8 +37,9 @@ public class AwsS3CredentialService {
   public CredentialLink storeCredential(Credential credential, String bucketName) throws RuntimeException{
     try { 
       UUID uuid = UUID.randomUUID();
-      String objectKey = uuid.toString() + ".txt";
-      String content = credential.getClientID()+":"+credential.getClientSecret();
+      String objectKey = "client_credentials_"+uuid.toString() + ".txt";
+      String content = "client_id="+credential.getClientID()+"\n"+
+          " ***REMOVED***
       byte[] contentAsBytes = content.getBytes();
       ByteArrayInputStream contentsAsStream = new ByteArrayInputStream(contentAsBytes);
       ObjectMetadata md = new ObjectMetadata();
