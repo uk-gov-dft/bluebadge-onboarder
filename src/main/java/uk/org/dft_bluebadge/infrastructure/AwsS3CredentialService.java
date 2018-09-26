@@ -3,6 +3,7 @@ package uk.org.dft_bluebadge.infrastructure;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.SdkClientException;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -18,10 +19,9 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import uk.org.dft_bluebadge.Credential;
 import uk.org.dft_bluebadge.CredentialLink;
 import uk.org.dft_bluebadge.LocalAuthorityConsumer;
-
-import uk.org.dft_bluebadge.Credential;
 
 public class AwsS3CredentialService {
 
@@ -31,7 +31,7 @@ public class AwsS3CredentialService {
   public AwsS3CredentialService(String region){
       this.s3Client = AmazonS3ClientBuilder.standard()
         .withRegion(region)
-        .withCredentials(new ProfileCredentialsProvider())
+        .withCredentials(new DefaultAWSCredentialsProviderChain())
         .build();
   }
 

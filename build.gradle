@@ -45,6 +45,7 @@ repositories {
 mainClassName = 'uk.org.dft_bluebadge.App'
 
 dependencies {
+  compile("org.slf4j:slf4j-simple:$slf4jVersion")
   compile("org.postgresql:postgresql:$postgresVersion")
   compile("org.mindrot:jbcrypt:$jbcryptVersion")
   compile("commons-codec:commons-codec:$commonsCodecVersion")

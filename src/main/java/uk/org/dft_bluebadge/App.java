@@ -19,6 +19,10 @@ public class App {
 
   public static void main(String[] args) {
     Gson gson = new Gson();
+    get("/", (req, res) -> {
+      return "SUCCESS";
+    });
+
     post("/apiConsumers", (req, res) -> {
       CreateApiConsumerRequest request = 
         gson.fromJson(req.body(), CreateApiConsumerRequest.class);
