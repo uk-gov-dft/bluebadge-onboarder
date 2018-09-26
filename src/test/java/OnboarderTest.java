@@ -55,17 +55,19 @@ public class OnboarderTest {
 
     try(Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/bb_dev", connectionProps)){
       String SQL = "SELECT client_id, client_secret, local_authority_short_code, active from usermanagement.client_credentials where client_id = ?";
-      PreparedStatement pstmt = connection.prepareStatement(SQL);
-      pstmt.setString(1, factory.getLast().getClientID());
+      try(PreparedStatement pstmt = connection.prepareStatement(SQL)){
+        pstmt.setString(1, factory.getLast().getClientID());
 
-      ResultSet rs = pstmt.executeQuery();
-      if(rs.next()){
-        String clientId = rs.getString("client_id");
-        String clientSecret = rs.getString("client_secret");
+        try(ResultSet rs = pstmt.executeQuery()){
+          if(rs.next()){
+            String clientId = rs.getString("client_id");
+            String clientSecret = rs.getString("client_secret");
 
-        assertTrue(BCrypt.checkpw(factory.getLast().getClientSecret(), clientSecret), "Secret Hash not equal");
-      }else{
-        throw new RuntimeException("No Data");
+            assertTrue(BCrypt.checkpw(factory.getLast().getClientSecret(), clientSecret), "Secret Hash not equal");
+          }else{
+            throw new RuntimeException("No Data");
+          }
+        }
       }
     }
 

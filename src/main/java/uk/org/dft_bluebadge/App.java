@@ -3,7 +3,6 @@ package uk.org.dft_bluebadge;
 import com.google.gson.Gson;
 import static spark.Spark.*;
 import uk.org.dft_bluebadge.Base64CredentialFactory;
-import uk.org.dft_bluebadge.CredentialFactoryHarness;
 import uk.org.dft_bluebadge.CredentialService;
 import uk.org.dft_bluebadge.EmailAddress;
 import uk.org.dft_bluebadge.LocalAuthorityConsumer;
