@@ -9,9 +9,10 @@ bash load-modules.sh
 docker-compose kill
 docker-compose rm
 
-
 docker-compose up -d postgresql
 
 ./wait_for_it.sh localhost:5432 
+
+psql -h localhost -U developer -d bb_dev -f ./scripts/db/setup-users.sql 
 
 popd
