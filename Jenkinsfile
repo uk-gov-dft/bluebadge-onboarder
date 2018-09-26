@@ -24,7 +24,9 @@ pipeline {
 
     stages {
         stage('Setup') {
-          sh 'bash scripts/setup_dev_env.sh'
+          steps {
+            sh 'bash scripts/setup_dev_env.sh'
+          }
         }
 
         stage('Test') {
