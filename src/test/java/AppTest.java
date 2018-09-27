@@ -29,9 +29,9 @@ import uk.org.dft_bluebadge.Onboarder;
 import uk.org.dft_bluebadge.infrastructure.InMemoryCredentialTransport;
 import uk.org.dft_bluebadge.infrastructure.PostgresCredentialService;
 
-public class OnboarderTest {
+public class AppTest {
 
-  static final Logger LOG = Logger.getLogger(OnboarderTest.class.getName());
+  static final Logger LOG = Logger.getLogger(AppTest.class.getName());
 
   @Test 
   public void test_something_does_something() 

@@ -12,21 +12,15 @@ import uk.org.dft_bluebadge.infrastructure.PostgresCredentialService;
 import uk.org.dft_bluebadge.infrastructure.NotifyCredentialTransport;
 
 public class App {
-  public String getGreeting() {
-    return "Hello world.";
-  }
-
   public static void main(String[] args) {
     Gson gson = new Gson();
-    get("/", (req, res) -> {
-      return "SUCCESS";
-    });
+    get("/", (req, res) -> "SUCCESS");
 
     post("/apiConsumers", (req, res) -> {
       CreateApiConsumerRequest request = 
         gson.fromJson(req.body(), CreateApiConsumerRequest.class);
 
-      String apiKey = Configuration.NOTIFY_API_KEY();
+      String apiKey = Configuration.notifyApiKey();
       CredentialFactory base64Factory = new Base64CredentialFactory();
       CredentialService service = new PostgresCredentialService(base64Factory);
       CredentialTransport transport = new NotifyCredentialTransport(apiKey); 

@@ -12,7 +12,7 @@ public class NotifyCredentialTransportTest {
 
   @Test 
   public void test_get_successful_response(){
-    String testApiKey = Configuration.NOTIFY_API_KEY();
+    String testApiKey = Configuration.notifyApiKey();
     NotifyCredentialTransport transport = new NotifyCredentialTransport(testApiKey); 
     EmailAddress address = new EmailAddress("andy.rea@does.not.exist");
     LocalAuthorityConsumer consumer = new LocalAuthorityConsumer(address,"ABERD");

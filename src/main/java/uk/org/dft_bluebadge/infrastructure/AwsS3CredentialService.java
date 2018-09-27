@@ -4,7 +4,6 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -21,6 +20,7 @@ import java.util.logging.Logger;
 
 import uk.org.dft_bluebadge.Credential;
 import uk.org.dft_bluebadge.CredentialLink;
+import uk.org.dft_bluebadge.OnboarderApplicationException;
 
 public class AwsS3CredentialService {
 
@@ -34,7 +34,7 @@ public class AwsS3CredentialService {
         .build();
   }
 
-  public CredentialLink storeCredential(Credential credential, String bucketName) throws RuntimeException{
+  public CredentialLink storeCredential(Credential credential, String bucketName) {
     try { 
       UUID uuid = UUID.randomUUID();
       String objectKey = "client_credentials_"+uuid.toString() + ".txt";
@@ -62,11 +62,11 @@ public class AwsS3CredentialService {
       return new CredentialLink(url, new Date(expTimeMillis));
     }
     catch(AmazonServiceException ex) {
-        LOG.log(Level.SEVERE, ex.getMessage(), ex);
+        LOG.log(Level.SEVERE, "AWS_SEVICE_EXCEPTION", ex);
     }
     catch(SdkClientException ex) {
-        LOG.log(Level.SEVERE, ex.getMessage(), ex);
-    }   
-    throw new RuntimeException("Failed to store credential in AWS S3");
+        LOG.log(Level.SEVERE, "SDK_CLIENT_EXCEPTION", ex);
+    }
+    throw new OnboarderApplicationException("Failed to store credential in AWS S3");
   }
 }
