@@ -131,7 +131,8 @@ artifacts {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from shadowJar
+          from components.shadow
+          artifactId = "$archivesBaseName"
         }
     }
 }
