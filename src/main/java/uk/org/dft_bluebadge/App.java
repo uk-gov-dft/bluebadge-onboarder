@@ -12,15 +12,9 @@ import uk.org.dft_bluebadge.infrastructure.PostgresCredentialService;
 import uk.org.dft_bluebadge.infrastructure.NotifyCredentialTransport;
 
 public class App {
-  public String getGreeting() {
-    return "Hello world.";
-  }
-
   public static void main(String[] args) {
     Gson gson = new Gson();
-    get("/", (req, res) -> {
-      return "SUCCESS";
-    });
+    get("/", (req, res) -> "SUCCESS");
 
     post("/apiConsumers", (req, res) -> {
       CreateApiConsumerRequest request = 
