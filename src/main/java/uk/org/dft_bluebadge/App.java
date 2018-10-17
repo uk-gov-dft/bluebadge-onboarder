@@ -20,7 +20,7 @@ public class App {
       CreateApiConsumerRequest request = 
         gson.fromJson(req.body(), CreateApiConsumerRequest.class);
 
-      String apiKey = Configuration.NOTIFY_API_KEY();
+      String apiKey = Configuration.notifyApiKey();
       CredentialFactory base64Factory = new Base64CredentialFactory();
       CredentialService service = new PostgresCredentialService(base64Factory);
       CredentialTransport transport = new NotifyCredentialTransport(apiKey); 

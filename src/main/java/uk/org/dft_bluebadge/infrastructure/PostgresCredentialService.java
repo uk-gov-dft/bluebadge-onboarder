@@ -1,10 +1,8 @@
 package uk.org.dft_bluebadge.infrastructure;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -19,6 +17,7 @@ import uk.org.dft_bluebadge.Credential;
 import uk.org.dft_bluebadge.CredentialFactory;
 import uk.org.dft_bluebadge.CredentialService;
 import uk.org.dft_bluebadge.LocalAuthorityConsumer;
+import uk.org.dft_bluebadge.OnboarderApplicationException;
 
 public class PostgresCredentialService implements CredentialService{
 
@@ -29,23 +28,35 @@ public class PostgresCredentialService implements CredentialService{
     this.factory = factory;
   }
 
-  public Credential generate(LocalAuthorityConsumer consumer) throws RuntimeException{
+  public Credential generate(LocalAuthorityConsumer consumer) {
 
     Credential credential = this.factory.generate();
 
     try{
       Class.forName("org.postgresql.Driver");
-      Properties connectionProps = new Properties();
-      connectionProps.put("user", Configuration.DB_USER());
-      connectionProps.put("password", Configuration.DB_PASSWORD());
 
-      String dbHost = Configuration.DB_HOST();
-      String dbPort = Configuration.DB_PORT();
-      String dbName = Configuration.DB_NAME();
+      insertCredential(consumer, credential);
+
+      return credential;
+    }catch(ClassNotFoundException ex){
+      LOG.log(Level.SEVERE, ex.getMessage(), ex);
+    }
+    throw new OnboarderApplicationException("Failed to store credential in database");
+  }
+
+  private void insertCredential(LocalAuthorityConsumer consumer, Credential credential){
+      Properties connectionProps = new Properties();
+      connectionProps.put("user", Configuration.dbUser());
+      connectionProps.put("password", Configuration.dbPassword());
+
+      String dbHost = Configuration.dbHost();
+      String dbPort = Configuration.dbPort();
+      String dbName = Configuration.dbName();
       String dbUrl = String.format("jdbc:postgresql://%s:%s/%s", dbHost, dbPort, dbName);
+
       try(Connection connection = DriverManager.getConnection(dbUrl, connectionProps)){
-        String SQL = "INSERT INTO usermanagement.client_credentials (client_id, client_secret, local_authority_short_code, active, creation_timestamp, expiry_timestamp) VALUES (?,?,?,?,?,?)";
-        try(PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+        String sql = "INSERT INTO usermanagement.client_credentials (client_id, client_secret, local_authority_short_code, active, creation_timestamp, expiry_timestamp) VALUES (?,?,?,?,?,?)";
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)) {
           pstmt.setString(1, credential.getClientID());
 
           String hashedSecret = BCrypt.hashpw(credential.getClientSecret(), BCrypt.gensalt(12));
@@ -60,16 +71,11 @@ public class PostgresCredentialService implements CredentialService{
           java.util.Date expiry = cal.getTime();
           pstmt.setDate(6, new java.sql.Date(expiry.getTime()));
 
-          Boolean success = pstmt.execute();
-          return credential;
+          pstmt.execute();
         }
       }catch(SQLException ex){
         LOG.log(Level.SEVERE, ex.getMessage(), ex);
       }
-    }catch(ClassNotFoundException ex){
-      LOG.log(Level.SEVERE, ex.getMessage(), ex);
-    }
-    throw new RuntimeException("Failed to store credential in database");
   }
 
 }

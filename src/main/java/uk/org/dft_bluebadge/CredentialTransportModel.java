@@ -1,6 +1,5 @@
 package uk.org.dft_bluebadge;
 
-import java.util.Date;
 
 import uk.org.dft_bluebadge.CredentialLink;
 import uk.org.dft_bluebadge.LocalAuthorityConsumer;
