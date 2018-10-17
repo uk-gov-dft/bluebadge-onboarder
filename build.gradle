@@ -119,6 +119,12 @@ artifactory {
         }
     }
 }
+
+shadowJar {
+  baseName = ''
+  classifier = ''
+}
+
 publishing {
     publications {
         shadow(MavenPublication) {
