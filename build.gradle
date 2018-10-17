@@ -13,8 +13,7 @@ buildscript {
         url "https://plugins.gradle.org/m2/"
       }
     }
-
-    dependencies {
+dependencies {
       classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
       classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
     }
@@ -24,6 +23,8 @@ plugins {
     id 'java'
     id 'application'
     id 'jacoco'
+    id 'maven'
+    id 'maven-publish'
     id 'org.gradle.java'
     id 'com.scuilion.syntastic' version '0.3.8'
     id 'com.github.johnrengelman.shadow' version '2.0.4'
@@ -106,6 +107,21 @@ artifactory {
             publications('project_service')
             publishArtifacts = true
             publishPom = true
+        }
+    }
+
+    resolve {
+        repository {
+            repoKey = 'gradle-dev-local'
+            maven = true
+
+        }
+    }
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
         }
     }
 }
