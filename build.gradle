@@ -33,6 +33,7 @@ plugins {
 }
 
 group = 'uk.gov.dft.bluebadge'
+version = '0.1.0'
 archivesBaseName = "onboarder-service"
 sourceCompatibility = 1.8
 
