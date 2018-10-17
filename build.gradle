@@ -121,9 +121,9 @@ artifactory {
 }
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifactId "${archivesBaseName}"
+        shadow(MavenPublication) {
+          from components.shadow
+          artifactId = "${archivesBaseName}"
         }
     }
 }
