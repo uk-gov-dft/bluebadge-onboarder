@@ -127,10 +127,12 @@ shadowJar {
 
 publishing {
     publications {
-        shadow(MavenPublication) {
-          project.shadow.component(it)
-          artifact jar
-          artifactId = "${archivesBaseName}"
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
         }
     }
 }
