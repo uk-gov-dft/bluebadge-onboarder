@@ -31,7 +31,7 @@ pipeline {
 
         stage('Test') {
             steps {
-              sh './gradlew --no-daemon clean test'
+              sh './gradlew --no-daemon clean test shadowJar'
             } 
         }
 
