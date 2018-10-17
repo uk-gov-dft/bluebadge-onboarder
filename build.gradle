@@ -121,18 +121,17 @@ artifactory {
 }
 
 shadowJar {
-  baseName = 'something'
-  classifier = ''
+    archiveName = "$baseName-$version.$extension"
+}
+
+artifacts {
+    archives shadowJar
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
-
-            artifact sourceJar {
-                classifier "sources"
-            }
+            from shadowJar
         }
     }
 }
