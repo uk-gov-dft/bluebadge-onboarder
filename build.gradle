@@ -13,7 +13,7 @@ buildscript {
         url "https://plugins.gradle.org/m2/"
       }
     }
-dependencies {
+    dependencies {
       classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
       classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
     }
@@ -121,14 +121,15 @@ artifactory {
 }
 
 shadowJar {
-  baseName = ''
+  baseName = 'something'
   classifier = ''
 }
 
 publishing {
     publications {
         shadow(MavenPublication) {
-          from components.shadow
+          project.shadow.component(it)
+          artifact jar
           artifactId = "${archivesBaseName}"
         }
     }
