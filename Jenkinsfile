@@ -34,6 +34,12 @@ pipeline {
               sh './gradlew --no-daemon clean test'
             } 
         }
+
+        stage('Publish') {
+            steps {
+              sh './gradlew --no-daemon artifactoryPublish artifactoryDeploy'
+            } 
+        }
     }
 
     post {
