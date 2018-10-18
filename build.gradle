@@ -40,6 +40,12 @@ sourceCompatibility = 1.8
 repositories {
   jcenter()
   mavenCentral()
+  maven {
+      url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
+  }
+  maven {
+      url  "https://dl.bintray.com/gov-uk-notify/maven"
+  }
 }
 
  project.ext {
@@ -53,7 +59,7 @@ repositories {
     notifyVersion="3.12.0-RELEASE"
     sparkVersion="2.7.2"
     gsonVersion="2.8.0"
-    gradleVersion="4.8"
+    gradleVersion="4.7.3"
     jacocoVersion="0.8.1"
     hamcrestVersion="1.3"
 }
@@ -105,7 +111,7 @@ artifactory {
         publishArtifacts = true
         publishPom = true
         defaults {
-            publications('project_service')
+            publications('shadowJar')
             publishArtifacts = true
             publishPom = true
         }
@@ -130,8 +136,8 @@ artifacts {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-          from components.shadow
+        shadowJar(MavenPublication) {
+          from components.java
           artifactId = "$archivesBaseName"
         }
     }
