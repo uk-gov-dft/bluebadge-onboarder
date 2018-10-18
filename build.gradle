@@ -136,9 +136,9 @@ artifacts {
 
 publishing {
     publications {
-        shadowJar(MavenPublication) {
-          from components.shadow
-          artifactId = "$archivesBaseName"
-        }
+      shadowJar(MavenPublication) { publication ->
+        project.shadow.component(publication)
+        artifactId = "$archivesBaseName"
+      }
     }
 }
